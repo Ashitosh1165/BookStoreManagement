@@ -6,9 +6,13 @@ import lombok.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import com.example.BookStoreManagement.JWTSecurity.JwtUtil;
+import com.example.BookStoreManagement.config.JwtTokenProvider;
+import com.example.BookStoreManagement.config.UserPrincipal;
 import com.example.BookStoreManagement.data.model.User;
 import com.example.BookStoreManagement.repository.UserRepository;
 
@@ -21,14 +25,17 @@ public class AuthController {
     private final AuthenticationManager authManager;
 	
 	@Autowired
-    private  JwtUtil jwtUtil;
+    private  JwtTokenProvider jwtUtil;
 	
 	@Autowired	
     private UserRepository userRepo;
 	
+	@Autowired
+	private UserDetailsService userDetailsService;
+	
     private final PasswordEncoder passwordEncoder;
 
-    public AuthController(AuthenticationManager authManager, JwtUtil jwtUtil, UserRepository userRepo, PasswordEncoder passwordEncoder) {
+    public AuthController(AuthenticationManager authManager, JwtTokenProvider jwtUtil, UserRepository userRepo, PasswordEncoder passwordEncoder) {
         this.authManager = authManager;
         this.jwtUtil = jwtUtil;
         this.userRepo = userRepo;
@@ -50,11 +57,26 @@ public class AuthController {
         return "User registered successfully!";
     }
 
+//    @PostMapping("/login")
+//    public String login(@RequestBody LoginRequest request) {
+//        authManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
+//        return jwtUtil.generateToken(request.getUsername());
+//    }
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request) {
-        authManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-        return jwtUtil.generateToken(request.getUsername());
+        // Authenticate the user
+        Authentication authentication = authManager.authenticate(
+            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+        );
+
+        // Get the UserPrincipal from the Authentication object
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+
+        // Generate and return the JWT token
+        return jwtUtil.generateToken(userPrincipal);
     }
+
+
 
     @Data
     static class LoginRequest {

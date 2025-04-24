@@ -1,10 +1,10 @@
-package com.example.BookStoreManagement;
+package com.ravish.crm;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BookStoreManagementApplicationTests {
+class CrmApplicationTests {
 
 	@Test
 	void contextLoads() {

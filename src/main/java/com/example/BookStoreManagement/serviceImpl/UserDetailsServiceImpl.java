@@ -11,13 +11,16 @@ import com.example.BookStoreManagement.data.model.User;
 import java.util.List;
 
 @Service
-public class UserDetailsServiceImpl implements UserDetailsService {
+public class UserDetailsServiceImpl  {
 
 	@Autowired
     private  UserRepository userRepo;
 
+//	 @Autowired
+//	    public UserDetailsServiceImpl(UserRepository userRepo) {
+//	        this.userRepo = userRepo;
+//	    }
    
-    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Load user from the repository (make sure the repository method exists)
         User user = userRepo.findByUsername(username)
@@ -30,4 +33,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 List.of(new SimpleGrantedAuthority("ROLE_" + user.getRole())) // Adding the role to the authorities
         );
     }
+
+	
 }
