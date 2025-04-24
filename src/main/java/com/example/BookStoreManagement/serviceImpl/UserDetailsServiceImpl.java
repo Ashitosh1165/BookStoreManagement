@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.*;
 import org.springframework.stereotype.Service;
 
 import com.example.BookStoreManagement.repository.UserRepository;
+import com.example.BookStoreManagement.data.model.User;
 
 import java.util.List;
 
@@ -16,10 +17,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private  UserRepository userRepo;
 
    
-	 @Autowired
-	    public UserDetailsServiceImpl(UserRepository userRepo) {
-	        this.userRepo = userRepo;
-	    }
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // Load user from the repository (make sure the repository method exists)

@@ -4,6 +4,7 @@ package com.example.BookStoreManagement.data.model;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -11,7 +12,6 @@ public class User {
 
     private String username;
     private String password;
-    private String loginName;
 
     @Enumerated(EnumType.STRING)
     private Role role;
@@ -50,14 +50,6 @@ public class User {
 
 	public void setRole(Role role) {
 		this.role = role;
-	}
-
-	public String getLoginName() {
-		return loginName;
-	}
-
-	public void setLoginName(String loginName) {
-		this.loginName = loginName;
 	}
     
 }

@@ -21,10 +21,10 @@ import java.util.*;
 public class CustomerController {
 
     @Autowired
-    private  BookRepository bookRepo;
+    private final BookRepository bookRepo;
     
     @Autowired
-    private  OrderRepository orderRepo;
+    private final OrderRepository orderRepo;
     
     @Autowired
     private final UserRepository userRepo;
@@ -50,7 +50,7 @@ public class CustomerController {
  // Place Order
     @PostMapping("/orders")
     public Order placeOrder(@RequestBody List<OrderItemRequest> items, Authentication auth) {
-        User user = userRepo.findByUsername(auth.getName());
+        User user = userRepo.findByUsername(auth.getName()).orElseThrow();
 
         List<OrderItem> orderItems = new ArrayList<>();
         double total = 0;
@@ -96,7 +96,7 @@ public class CustomerController {
 
     @GetMapping("/orders")
     public List<Order> getMyOrders(Authentication auth) {
-        User user = userRepo.findByUsername(auth.getName());
+        User user = userRepo.findByUsername(auth.getName()).orElseThrow();
         return orderRepo.findByCustomer(user);
     }
 
