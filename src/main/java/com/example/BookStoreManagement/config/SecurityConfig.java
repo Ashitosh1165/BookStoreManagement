@@ -173,32 +173,13 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     	http
-      .cors().and().csrf().disable()
-      .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-      .and()
-      .authorizeHttpRequests()
-      .requestMatchers("/", "/favicon.ico", "/**", "*.png", "*.gif", "*.svg", "*.jpg", 
-              "*.html", "*.css", "*.js")
-          .permitAll()
-          .requestMatchers("/api/auth/signin",
-                           "/api/menu/getmodulelst",
-                           "/api/menu/menubyuser",
-                           "/api/menu/menubymenname",
-                           "/api/menu/savemenubyuser",
-                           "/api/master/getallActiveuser",
-                           "/api/menu/getAllgroup",
-                           "/api/task/saveAlltaskEntry",
-                           "/api/auth/changePassword",
-                           "/api/transaction/getProjectReportData1",
-                        
-                           "/api/transaction/getProjectData",
-                           "/api/transaction/getKPIDetailsbyID",
-                           "/api/transaction/getPerformanceData",
-                           "/api/master/getunitofmeasure",
-                           "/api/master/getempmasterfroEmp",
-                           "/api/menu/SaveUserGroup",
-                           "/api/menu/health"
-                           ).permitAll().anyRequest().authenticated();
+    	.csrf().disable()
+        .authorizeHttpRequests()
+        .requestMatchers("/auth/**", "/swagger-ui.html", "/api-docs/**", "/swagger-ui/**").permitAll()
+        .requestMatchers("/admin/**").hasRole("ADMIN")
+        .requestMatchers("/manager/**").hasRole("MANAGER")
+        .requestMatchers("/customer/**").hasRole("CUSTOMER")
+        .anyRequest().authenticated();
   
 //  http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
   

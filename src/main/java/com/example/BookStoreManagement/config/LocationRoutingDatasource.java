@@ -12,8 +12,6 @@ import org.springframework.jdbc.datasource.AbstractDataSource;
 import com.example.BookStoreManagement.CurrentTenantId;
 
 
-/*  @author Ashitosh* */
-
 public class LocationRoutingDatasource extends AbstractDataSource {
 
   private Map<Object, Object> targetDataSources;

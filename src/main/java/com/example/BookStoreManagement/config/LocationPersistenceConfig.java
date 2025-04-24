@@ -19,12 +19,12 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-/*  @author Ashitosh* */
+
 @Configuration
 @EnableTransactionManagement
-@ComponentScan("com.ravish.ClinicServer.service")
-@EnableJpaRepositories(basePackages = { "com.ravish.ClinicServer.repository",
-		"com.ravish.ClinicServer.data.model" }, entityManagerFactoryRef = "locationEntityManagerFactory", 
+@ComponentScan("com.example.BookStoreManagement.serviceImpl")
+@EnableJpaRepositories(basePackages = { "ccom.example.BookStoreManagement.repository",
+		"com.example.BookStoreManagement.data.model" }, entityManagerFactoryRef = "locationEntityManagerFactory", 
 		transactionManagerRef = "locationTransactionManager")
 public class LocationPersistenceConfig {
 	

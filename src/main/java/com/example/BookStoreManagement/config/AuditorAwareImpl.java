@@ -3,8 +3,6 @@
  */
 package com.example.BookStoreManagement.config;
 
-
-
 import java.util.Optional;
 
 import org.springframework.data.domain.AuditorAware;
@@ -12,14 +10,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import com.example.BookStoreManagement.config.UserPrincipal;
-/**
- * @author Ashitosh
- *
- */
+
 public class AuditorAwareImpl implements AuditorAware {
 
-//  @Override
-	@Override
   public Optional<Integer> getCurrentAuditor() {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
