@@ -32,7 +32,7 @@ public class LocationPersistenceConfig {
 	public LocalContainerEntityManagerFactoryBean locationEntityManagerFactory() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
 		em.setDataSource(locationDataSource());
-		em.setPackagesToScan("com.ravish.ClinicServer.data.model");
+		em.setPackagesToScan("com.example.BookStoreManagement.data.model");
 		em.setPersistenceUnitName("location_pu");
 
 		JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();

@@ -8,8 +8,6 @@ com/example/BookStoreManagement/data/model/User.class
 com/example/BookStoreManagement/config/JwtTokenProvider.class
 com/example/BookStoreManagement/serviceImpl/UserDetailsServiceImpl.class
 com/example/BookStoreManagement/config/LocationRoutingDatasource.class
-com/example/BookStoreManagement/shorturl/Easytinyurl.class
-com/example/BookStoreManagement/shorturl/TestSpring.class
 com/example/BookStoreManagement/controllers/AdminController.class
 com/example/BookStoreManagement/config/AuditorAwareImpl.class
 com/example/BookStoreManagement/controllers/AuthController.class
@@ -17,13 +15,11 @@ Common/Common.class
 com/example/BookStoreManagement/data/model/OrderItem.class
 com/example/BookStoreManagement/config/WebMvcConfig.class
 Common/SendGrid.class
-com/example/BookStoreManagement/tenants/TenantRepository.class
 com/example/BookStoreManagement/controllers/CustomerController.class
 com/example/BookStoreManagement/BookStoreManagementApplication.class
 com/example/BookStoreManagement/repository/AuthorRepository.class
 com/example/BookStoreManagement/controllers/AuthController$LoginRequest.class
 com/example/BookStoreManagement/CurrentTenantId.class
-com/example/BookStoreManagement/shorturl/ShortdataResponse.class
 com/example/BookStoreManagement/config/LocationPersistenceConfig.class
 com/example/BookStoreManagement/repository/OrderRepository.class
 com/example/BookStoreManagement/controllers/AuthController$RegisterRequest.class
@@ -36,7 +32,5 @@ com/example/BookStoreManagement/Exception/GlobalExceptionHandler.class
 Common/Common$EmailOperation.class
 com/example/BookStoreManagement/config/UserPrincipal.class
 com/example/BookStoreManagement/data/model/User$Role.class
-com/example/BookStoreManagement/shorturl/ShortUrlResponse.class
-com/example/BookStoreManagement/tenants/Tenant.class
 com/example/BookStoreManagement/data/model/Author.class
 com/example/BookStoreManagement/config/JwtAuthenticationEntryPoint.class

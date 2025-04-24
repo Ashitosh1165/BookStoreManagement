@@ -181,8 +181,7 @@ public class SecurityConfig {
         .requestMatchers("/customer/**").hasRole("CUSTOMER")
         .anyRequest().authenticated();
   
-//  http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
-  
+ 
   return http.build();
     }
 }

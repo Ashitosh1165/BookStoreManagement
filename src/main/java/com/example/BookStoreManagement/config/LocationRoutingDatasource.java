@@ -48,7 +48,6 @@ public class LocationRoutingDatasource extends AbstractDataSource {
   }
 
   protected DataSource determineTargetDataSource() {
-//	  CurrentTenantId.set("BMS");
     Object lookupKey = CurrentTenantId.get();
     DataSource dataSource = (DataSource) this.targetDataSources.get(lookupKey);
     if (dataSource == null) {
