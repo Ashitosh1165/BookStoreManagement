@@ -4,13 +4,20 @@ package com.example.BookStoreManagement.controllers;
 import jakarta.validation.Valid;
 import lombok.Data;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.example.BookStoreManagement.config.JwtTokenProvider;
+import com.example.BookStoreManagement.config.UserPrincipal;
 import com.example.BookStoreManagement.data.model.User;
+import com.example.BookStoreManagement.payload.LoginRequest;
+import com.example.BookStoreManagement.payload.RegisterRequest;
 import com.example.BookStoreManagement.repository.UserRepository;
 import com.example.BookStoreManagement.serviceImpl.UserDetailsServiceImpl;
 
@@ -29,7 +36,10 @@ public class AuthController {
     private UserRepository userRepo;
 	
 	@Autowired
-	private UserDetailsServiceImpl userDetailsService;
+	private UserDetailsService userDetailsService;
+	
+	@Autowired
+    private AuthenticationManager authenticationManager;
 	
     private final PasswordEncoder passwordEncoder;
 
@@ -62,64 +72,64 @@ public class AuthController {
 //    }
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request) {
-        // Authenticate the user based on provided username and password
-        authManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
-        );
-
-        // Load user details from the database
-        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
-
-        // Generate JWT token for the authenticated user
-        return jwtUtil.generateToken(userDetails);
-    }
-
-
-    @Data
-    static class LoginRequest {
-        private String username;
-        private String password;
-		public String getUsername() {
-			return username;
-		}
-		public void setUsername(String username) {
-			this.username = username;
-		}
-		public String getPassword() {
-			return password;
-		}
-		public void setPassword(String password) {
-			this.password = password;
-		}
+        // Authenticate the user
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+            );
+            if (authentication.isAuthenticated()) {
+                return jwtUtil.generateToken(request.getUsername());
+            } else {
+                throw new UsernameNotFoundException("Invalid user request!");
+            }
         
     }
 
-    @Data
-    static class RegisterRequest {
-        private String username;
-        private String password;
-        private User.Role role;
-		public String getUsername() {
-			return username;
-		}
-		public void setUsername(String username) {
-			this.username = username;
-		}
-		public String getPassword() {
-			return password;
-		}
-		public void setPassword(String password) {
-			this.password = password;
-		}
-		public User.Role getRole() {
-			return role;
-		}
-		public void setRole(User.Role role) {
-			this.role = role;
-		}
-        
-        
-    }
+
+//    @Data
+//    static class LoginRequest {
+//        private String username;
+//        private String password;
+//		public String getUsername() {
+//			return username;
+//		}
+//		public void setUsername(String username) {
+//			this.username = username;
+//		}
+//		public String getPassword() {
+//			return password;
+//		}
+//		public void setPassword(String password) {
+//			this.password = password;
+//		}
+//        
+//    }
+
+//    @Data
+//    static class RegisterRequest {
+//        private String username;
+//        private String password;
+//        private User.Role role;
+//		public String getUsername() {
+//			return username;
+//		}
+//		public void setUsername(String username) {
+//			this.username = username;
+//		}
+//		public String getPassword() {
+//			return password;
+//		}
+//		public void setPassword(String password) {
+//			this.password = password;
+//		}
+//		public User.Role getRole() {
+//			return role;
+//		}
+//		public void setRole(User.Role role) {
+//			this.role = role;
+//		}
+//        
+//        
+//    }
     
     
 }
