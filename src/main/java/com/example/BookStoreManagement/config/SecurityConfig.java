@@ -46,8 +46,12 @@ import com.example.BookStoreManagement.serviceImpl.UserDetailsServiceImpl;
 @EnableWebSecurity
 public class SecurityConfig {
 
-    @Autowired 
-    private JwtAuthenticationFilter jwtFilter;
+    
+    private final JwtAuthenticationFilter jwtFilter;
+    
+    public SecurityConfig(JwtAuthenticationFilter jwtFilter) {
+        this.jwtFilter = jwtFilter;
+    }
     
     @Autowired 
     private UserDetailsServiceImpl userDetailsService;

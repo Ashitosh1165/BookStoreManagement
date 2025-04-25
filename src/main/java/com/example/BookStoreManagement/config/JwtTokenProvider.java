@@ -62,28 +62,69 @@ import java.util.Map;
 //}
 @Component
 public class JwtTokenProvider {
-	private final String SECRET = "your_secret_key";
+	private String secretKey = "yourSecretKey"; // Make sure to replace with a secure key
+    private long validityInMilliseconds = 3600000; // 1 hour
 
+    // Method to generate JWT token
     public String generateToken(UserDetails userDetails) {
+        Claims claims = Jwts.claims().setSubject(userDetails.getUsername()); // Set the username as the subject
+        
+        // You can also add custom claims like roles, etc.
+        // claims.put("roles", userDetails.getAuthorities());
+
+        Date now = new Date();
+        Date validity = new Date(now.getTime() + validityInMilliseconds);
+
+        // Create the JWT token
         return Jwts.builder()
-            .setSubject(userDetails.getUsername())
-            .claim("roles", userDetails.getAuthorities())
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10))
-            .signWith(SignatureAlgorithm.HS256, SECRET)
-            .compact();
+                   .setClaims(claims)
+                   .setIssuedAt(now)
+                   .setExpiration(validity)
+                   .signWith(SignatureAlgorithm.HS256, secretKey)
+                   .compact();
     }
 
-    public String extractUsername(String token) {
-        return Jwts.parser().setSigningKey(SECRET)
-            .parseClaimsJws(token)
-            .getBody()
-            .getSubject();
+    // Method to extract username from the JWT token
+    public String getUsernameFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
+        return claims.getSubject(); // "subject" is typically the username in the JWT token
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername());
+    // Helper method to extract claims
+    private Claims getClaimsFromToken(String token) {
+        return Jwts.parser()
+                   .setSigningKey(secretKey)
+                   .parseClaimsJws(token)
+                   .getBody();
+    }
+
+    // Method to validate the token
+    public boolean validateToken(String token) {
+        try {
+            // Check if the token is expired
+            return !isTokenExpired(token);
+        } catch (ExpiredJwtException e) {
+            // Token has expired
+            return false;
+        } catch (SignatureException e) {
+            // Invalid signature
+            return false;
+        } catch (Exception e) {
+            // Any other exception (invalid token)
+            return false;
+        }
+    }
+
+    // Helper method to check if the token has expired
+    private boolean isTokenExpired(String token) {
+        Date expiration = getExpirationDateFromToken(token);
+        return expiration.before(new Date());
+    }
+
+    // Helper method to get expiration date from token
+    private Date getExpirationDateFromToken(String token) {
+        Claims claims = getClaimsFromToken(token);
+        return claims.getExpiration();
     }
 
 }

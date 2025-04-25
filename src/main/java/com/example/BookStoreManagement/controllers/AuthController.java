@@ -62,14 +62,17 @@ public class AuthController {
 //    }
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request) {
+        // Authenticate the user based on provided username and password
         authManager.authenticate(
             new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
+        // Load user details from the database
         UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+
+        // Generate JWT token for the authenticated user
         return jwtUtil.generateToken(userDetails);
     }
-
 
 
     @Data
