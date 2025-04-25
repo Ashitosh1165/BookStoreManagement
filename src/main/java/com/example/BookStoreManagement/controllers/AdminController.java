@@ -20,7 +20,7 @@ import com.example.BookStoreManagement.repository.BookRepository;
 import com.example.BookStoreManagement.repository.OrderRepository;
 
 @RestController
-@RequestMapping("/admin")
+@RequestMapping("/api/admin")
 public class AdminController {
 	
 	@Autowired

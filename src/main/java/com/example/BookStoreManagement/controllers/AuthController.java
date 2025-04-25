@@ -6,19 +6,17 @@ import lombok.Data;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.example.BookStoreManagement.config.JwtTokenProvider;
-import com.example.BookStoreManagement.config.UserPrincipal;
 import com.example.BookStoreManagement.data.model.User;
 import com.example.BookStoreManagement.repository.UserRepository;
+import com.example.BookStoreManagement.serviceImpl.UserDetailsServiceImpl;
 
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/auth")
 public class AuthController {
 
 	@Autowired
@@ -31,7 +29,7 @@ public class AuthController {
     private UserRepository userRepo;
 	
 	@Autowired
-	private UserDetailsService userDetailsService;
+	private UserDetailsServiceImpl userDetailsService;
 	
     private final PasswordEncoder passwordEncoder;
 
@@ -64,16 +62,12 @@ public class AuthController {
 //    }
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request) {
-        // Authenticate the user
-        Authentication authentication = authManager.authenticate(
+        authManager.authenticate(
             new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
 
-        // Get the UserPrincipal from the Authentication object
-        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-
-        // Generate and return the JWT token
-        return jwtUtil.generateToken(userPrincipal);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(request.getUsername());
+        return jwtUtil.generateToken(userDetails);
     }
 
 

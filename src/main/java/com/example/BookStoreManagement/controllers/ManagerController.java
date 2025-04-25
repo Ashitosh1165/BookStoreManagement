@@ -18,7 +18,7 @@ import com.example.BookStoreManagement.repository.BookRepository;
 import com.example.BookStoreManagement.repository.OrderRepository;
 
 @RestController
-@RequestMapping("/manager")
+@RequestMapping("/api/manager")
 public class ManagerController {
 
     private final BookRepository bookRepo;

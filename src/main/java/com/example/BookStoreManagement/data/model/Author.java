@@ -1,7 +1,6 @@
 package com.example.BookStoreManagement.data.model;
 
 import jakarta.persistence.*;
-import lombok.*;
 
 import java.util.List;
 

@@ -23,66 +23,99 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 
+//@Component
+//public class JwtAuthenticationFilter extends OncePerRequestFilter {
+//
+//	@Autowired
+//	private JwtTokenProvider tokenProvider;
+//
+//	@Autowired
+//	 private  UserDetailsServiceImpl userService;
+//
+//
+//		
+//	private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+//
+//	@Override
+//	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+//			throws ServletException, IOException {
+//		try {
+//			String jwt = getJwtFromRequest(request);
+//			System.out.println(jwt);
+////       String tenantId = getTokenFromRequest(request);
+////       CurrentTenantId.set(tenantId);
+//			if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
+//				Claims claims = tokenProvider.getUserIdFromJWT(jwt);
+//
+//				String comanycode = (String) claims.get("username");
+////				CurrentTenantId.set(comanycode);
+//				String username = (String) claims.get("username");
+//				Integer userId = Integer.parseInt(claims.getSubject());
+//
+//				/*
+//				 * Note that you could also encode the user's username and roles inside JWT
+//				 * claims and create the UserDetails object by parsing those claims from the
+//				 * JWT. That would avoid the following database hit. It's completely up to you.
+//				 */
+//				UserDetails userDetails = userService.loadUserByUsername(username);
+//				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+//						userDetails, null, userDetails.getAuthorities());
+//				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+//
+//				SecurityContextHolder.getContext().setAuthentication(authentication);
+//			}
+//		} catch (Exception ex) {
+//			logger.error("Could not set user authentication in security context", ex);
+//		}
+//
+//		filterChain.doFilter(request, response);
+//	}
+//
+//	private String getJwtFromRequest(HttpServletRequest request) {
+//		String bearerToken = request.getHeader("Authorization");
+//		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+//			return bearerToken.substring(7, bearerToken.length());
+//		}
+//		return null;
+//	}
+//
+//	private String getTokenFromRequest(HttpServletRequest request) {
+//		String bearerToken = request.getHeader("token");
+//
+//		return bearerToken;
+//	}
+//}
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-	@Autowired
-	private JwtTokenProvider tokenProvider;
+    @Autowired 
+    private JwtTokenProvider jwtUtil;
+    
+    @Autowired 
+    private UserDetailsServiceImpl userDetailsService;
 
-	@Autowired
-	 private  UserDetailsServiceImpl userService;
+    @Override
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
+        String authHeader = request.getHeader("Authorization");
 
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            String username = jwtUtil.extractUsername(token);
 
-		
-	private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		try {
-			String jwt = getJwtFromRequest(request);
-			System.out.println(jwt);
-//       String tenantId = getTokenFromRequest(request);
-//       CurrentTenantId.set(tenantId);
-			if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-				Claims claims = tokenProvider.getUserIdFromJWT(jwt);
+                if (jwtUtil.validateToken(token, userDetails)) {
+                    UsernamePasswordAuthenticationToken authToken =
+                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
+            }
+        }
+        filterChain.doFilter(request, response);
+    }
 
-				String comanycode = (String) claims.get("username");
-				CurrentTenantId.set(comanycode);
-				String username = (String) claims.get("username");
-				Integer userId = Integer.parseInt(claims.getSubject());
-
-				/*
-				 * Note that you could also encode the user's username and roles inside JWT
-				 * claims and create the UserDetails object by parsing those claims from the
-				 * JWT. That would avoid the following database hit. It's completely up to you.
-				 */
-				UserDetails userDetails = userService.loadUserByUsername(comanycode);
-				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-						userDetails, null, userDetails.getAuthorities());
-				authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-
-				SecurityContextHolder.getContext().setAuthentication(authentication);
-			}
-		} catch (Exception ex) {
-			logger.error("Could not set user authentication in security context", ex);
-		}
-
-		filterChain.doFilter(request, response);
-	}
-
-	private String getJwtFromRequest(HttpServletRequest request) {
-		String bearerToken = request.getHeader("Authorization");
-		if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
-			return bearerToken.substring(7, bearerToken.length());
-		}
-		return null;
-	}
-
-	private String getTokenFromRequest(HttpServletRequest request) {
-		String bearerToken = request.getHeader("token");
-
-		return bearerToken;
-	}
 }
 
