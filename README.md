@@ -42,7 +42,7 @@ git clone https://github.com/Ashitosh1165/BookStoreManagement.git
 cd BookStoreManagement
 
 Create MySQL Database:
-CREATE DATABASE bookstoredb;
+CREATE DATABASE dbBookStore;
 
 Run the Application
 mvn clean install
