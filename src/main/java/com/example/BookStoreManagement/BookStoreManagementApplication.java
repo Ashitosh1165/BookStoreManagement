@@ -9,8 +9,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 
 @SpringBootApplication
-@ComponentScan(basePackages = "com.example.BookStoreManagement.data.model")
-@EnableJpaRepositories(basePackages = "com.example.BookStoreManagement.repository")
+//@ComponentScan(basePackages = "com.example.BookStoreManagement.data.model")
+//@EnableJpaRepositories(basePackages = "com.example.BookStoreManagement.repository")
 public class BookStoreManagementApplication {
 
 	public static void main(String[] args) {

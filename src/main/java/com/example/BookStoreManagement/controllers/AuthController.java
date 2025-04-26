@@ -14,7 +14,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import com.example.BookStoreManagement.config.JwtTokenProvider;
-import com.example.BookStoreManagement.config.UserPrincipal;
 import com.example.BookStoreManagement.data.model.User;
 import com.example.BookStoreManagement.payload.LoginRequest;
 import com.example.BookStoreManagement.payload.RegisterRequest;
@@ -73,9 +72,11 @@ public class AuthController {
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request) {
         // Authenticate the user
+//    	System.out.println(passwordEncoder.encode(request.getPassword()));
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+                new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword())
             );
+        
             if (authentication.isAuthenticated()) {
                 return jwtUtil.generateToken(request.getUsername());
             } else {

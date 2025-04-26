@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import com.example.BookStoreManagement.data.model.User;
+import com.example.BookStoreManagement.data.model.User.Role;
 
 public class UserInfoDetails implements UserDetails{
 	private String username; // Changed from 'name' to 'email' for clarity
@@ -18,10 +19,10 @@ public class UserInfoDetails implements UserDetails{
     public UserInfoDetails(User userInfo) {
         this.username = userInfo.getUsername(); // Use email as username
         this.password = userInfo.getPassword();
-        this.authorities = List.of(userInfo.getRole().name())
-                .stream()
-                .map(SimpleGrantedAuthority::new)
-                .collect(Collectors.toList());
+        this.authorities = List.of(new SimpleGrantedAuthority("ROLE_" + userInfo.getRole().name()));
+//                .stream()
+//                .map(SimpleGrantedAuthority::new)
+//                .collect(Collectors.toList());
     }
 
     @Override
@@ -54,9 +55,13 @@ public class UserInfoDetails implements UserDetails{
         return true;
     }
 
-	@Override
 	public String getPassword() {
-		// TODO Auto-generated method stub
-		return null;
+		return password;
 	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	
 }

@@ -27,7 +27,6 @@ com/example/BookStoreManagement/controllers/ManagerController.class
 com/example/BookStoreManagement/data/model/Book.class
 com/example/BookStoreManagement/Exception/GlobalExceptionHandler.class
 Common/Common$EmailOperation.class
-com/example/BookStoreManagement/config/UserPrincipal.class
 com/example/BookStoreManagement/data/model/User$Role.class
 com/example/BookStoreManagement/data/model/Author.class
 com/example/BookStoreManagement/config/JwtAuthenticationEntryPoint.class
