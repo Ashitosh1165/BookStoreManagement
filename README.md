@@ -46,3 +46,7 @@ CREATE DATABASE bookstoredb;
 Run the Application
 mvn clean install
 Run application
+
+
+Postmant Collection Link :
+https://ashitoshmagdum.postman.co/workspace/AshitoshMagdum's-Workspace~a99ae6e8-f6ad-48fc-879b-13f28141d7fe/collection/44400456-4952c5b1-c6ba-4dc4-be03-e4945564208f?action=share&creator=44400456
