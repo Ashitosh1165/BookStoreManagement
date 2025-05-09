@@ -64,73 +64,23 @@ public class AuthController {
         return "User registered successfully!";
     }
 
-//    @PostMapping("/login")
-//    public String login(@RequestBody LoginRequest request) {
-//        authManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
-//        return jwtUtil.generateToken(request.getUsername());
-//    }
+
     @PostMapping("/login")
     public String login(@RequestBody LoginRequest request) {
-        // Authenticate the user
-//    	System.out.println(passwordEncoder.encode(request.getPassword()));
         Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword())
-            );
-        
-            if (authentication.isAuthenticated()) {
-                return jwtUtil.generateToken(request.getUsername());
-            } else {
-                throw new UsernameNotFoundException("Invalid user request!");
-            }
-        
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
+        );
+
+        if (authentication.isAuthenticated()) {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return jwtUtil.generateToken(userDetails);
+        } else {
+            throw new UsernameNotFoundException("Invalid user request!");
+        }
     }
 
 
-//    @Data
-//    static class LoginRequest {
-//        private String username;
-//        private String password;
-//		public String getUsername() {
-//			return username;
-//		}
-//		public void setUsername(String username) {
-//			this.username = username;
-//		}
-//		public String getPassword() {
-//			return password;
-//		}
-//		public void setPassword(String password) {
-//			this.password = password;
-//		}
-//        
-//    }
 
-//    @Data
-//    static class RegisterRequest {
-//        private String username;
-//        private String password;
-//        private User.Role role;
-//		public String getUsername() {
-//			return username;
-//		}
-//		public void setUsername(String username) {
-//			this.username = username;
-//		}
-//		public String getPassword() {
-//			return password;
-//		}
-//		public void setPassword(String password) {
-//			this.password = password;
-//		}
-//		public User.Role getRole() {
-//			return role;
-//		}
-//		public void setRole(User.Role role) {
-//			this.role = role;
-//		}
-//        
-//        
-//    }
     
     
 }
